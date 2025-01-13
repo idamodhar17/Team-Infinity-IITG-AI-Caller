@@ -16,6 +16,7 @@ def generate_response(user_query):
     - Free Trials: 7-day free trial available.
     - Accessibility: Family plans, wheelchair access, and multi-location access for Premium/Yearly members.
     - Other: No hidden charges, flexible payment options, free parking, and referral bonuses (1 free month for referrals).
+    - Our gym is conveniently located at 123 Fitness Street, City Center, Infinity Plaza. It's easily accessible from major roads and public transportation routes.
 
     Note:
     -Don't use hello in conversation again and again.
