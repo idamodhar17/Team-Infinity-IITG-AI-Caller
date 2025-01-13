@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../static/logo.png" type="image/x-icon">
+    <title>Infinity Gym's | AI Caller</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            color: #fff;
+        }
+
+        #video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(40, 39, 39, 80%);
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 80px auto;
+            background: rgba(34, 34, 34, 60%);
+            backdrop-filter: blur(20px);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            z-index: 1;
+            position: relative;
+            color: #fff;
+        }
+
+        h1 {
+            text-align: center;
+            color: #f8f9fa;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #f8f9fa;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .error {
+            background-color: #ff4f4f;
+            color: #fff;
+            border: 1px solid #ff3a3a;
+        }
+
+        .success {
+            background-color: #28a745;
+            color: #fff;
+            border: 1px solid #218838;
+        }
+
+        .info {
+            background-color: #17a2b8;
+            color: #fff;
+            border: 1px solid #138496;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type="file"] {
+            margin: 15px 0;
+            padding: 10px;
+            font-size: 16px;
+            color: #ccc;
+            background-color: #444;
+            border: 1px solid #666;
+            border-radius: 5px;
+        }
+
+        input[type="file"]::file-selector-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background-color: #0056b3;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+
+        /* Floating call response (outside of container, top-right) */
+        .call-response {
+            position: fixed;
+            top: 20px; /* Positioning it at the top */
+            right: 20px; /* Positioning it at the right */
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.8); /* Dark color */
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            z-index: 10;
+            display: none;
+            opacity: 1;
+            transition: opacity 1s ease-out;
+            width: 300px;
+        }
+
+        .call-response.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Background Video -->
+    <video id="video-background" autoplay muted loop>
+        <source src="../static/bg-video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Dark Overlay -->
+    <div class="overlay"></div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1>Infinity Gym's - AI Caller</h1>
+        <h2>Upload CSV</h2>
+
+        {% if error %}
+            <div class="message error">{{ error }}</div>
+        {% endif %}
+
+        {% if message %}
+            <div class="message success">{{ message }}</div>
+        {% endif %}
+
+        <div class="message info">
+            <p>Upload a CSV file with <strong>'name'</strong> and <strong>'phone'</strong> columns. Once uploaded, the system will process the file and call each customer.</p>
+        </div>
+
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".csv" required>
+            <button type="submit">Upload and Call</button>
+        </form>
+    </div>
+
+    <footer>
+        &copy; 2025 AI Caller | All Rights Reserved
+    </footer>
+
+    <!-- Floating Call Response (over the container, top-right) -->
+    <div class="call-response" id="call-response"></div>
+
+    <script>
+        // Function to display floating call response message at top-right
+        function showCallResponse(message, isError = false) {
+            const responseElement = document.getElementById('call-response');
+            responseElement.textContent = message;
+            responseElement.style.backgroundColor = isError ? '#ff4f4f' : '#28a745'; // Dark error or success color
+            responseElement.style.display = 'block';
+
+            // After 10 seconds, hide the message
+            setTimeout(() => {
+                responseElement.classList.add('hide');
+            }, 10000);
+        }
+
+        // Example Usage: Show success/error message
+        {% if call_responses %}
+            {% for response in call_responses %}
+                showCallResponse("{{ response }}", false);  // Pass true for errors
+            {% endfor %}
+        {% endif %}
+    </script>
+</body>
+</html>
