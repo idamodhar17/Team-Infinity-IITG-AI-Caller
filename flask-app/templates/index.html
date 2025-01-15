@@ -184,7 +184,12 @@
         {% endif %}
 
         <div class="message info">
-            <p>Upload a CSV file with <strong>'name'</strong> and <strong>'phone'</strong> columns. Once uploaded, the system will process the file and call each customer.</p>
+            <p>
+                Please upload a CSV file containing the <strong>'name'</strong> and <strong>'phone'</strong> columns. Once uploaded, the system will process the file and call each customer.  
+                <br><br>
+                You can find a sample CSV file in our Git repository:  
+                <a href="https://github.com/idamodhar17/Team-Infinity-IITG-AI-Caller/blob/main/uploads/sample_customers.csv" target="_blank">Sample CSV</a>  
+              </p>
         </div>
 
         <form action="/upload" method="POST" enctype="multipart/form-data">
