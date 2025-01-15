@@ -69,6 +69,7 @@ idamodhar17-team-infinity-iitg-ai-caller/
 ## Technologies Used 🛠️
 
 - **Twilio**: For voice call integration.
+- **Amazon Polly**: For human like Text-to-Speech conversion.
 - **Flask**: Lightweight Python web framework for the web app.
 - **Python**: Backend logic for handling customer data and interactions.
 - **JavaScript**: For managing call-related tasks in the Twilio integration.
